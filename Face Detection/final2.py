@@ -1,10 +1,6 @@
 import face_recognition
-import os
 
 def load_and_encode(image_path):
-    if not os.path.isfile(image_path):
-        print(f"File not found: {image_path}")
-        return None
     try:
         img = face_recognition.load_image_file(image_path)
         encodings = face_recognition.face_encodings(img)
@@ -12,10 +8,11 @@ def load_and_encode(image_path):
             print(f"No faces found in image: {image_path}")
             return None
         return encodings[0]
+    except FileNotFoundError:
+        print(f"File not found: {image_path}")
     except Exception as e:
         print(f"Error processing {image_path}: {e}")
-        return None
-
+    return None
 def recognize(img1_path, img2_path, tolerance=0.6):
     encoding_img1 = load_and_encode(img1_path)
     encoding_img2 = load_and_encode(img2_path)
